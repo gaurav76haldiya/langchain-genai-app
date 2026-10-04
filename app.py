@@ -4,45 +4,38 @@ from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 
 st.set_page_config(
-    page_title="Ollama GenAI App",
+    page_title="Ollama GenAI",
     page_icon="🤖"
 )
 
 st.title("🤖 LangChain + Ollama")
-st.write("Ask a question and get an AI-generated response.")
 
 prompt = ChatPromptTemplate.from_messages([
     (
         "system",
         "You are a helpful assistant. "
-        "Answer the user's question clearly and accurately."
+        "Answer clearly and accurately."
     ),
-    (
-        "human",
-        "{question}"
-    )
+    ("human", "{question}")
 ])
 
-llm = OllamaLLM(model="llama3.2:3b")
+llm = OllamaLLM(
+    model="llama3.2:3b",
+    base_url="http://localhost:11434"
+)
 
-output_parser = StrOutputParser()
-
-chain = prompt | llm | output_parser
+chain = prompt | llm | StrOutputParser()
 
 question = st.text_input(
-    "What question do you have in mind?",
-    placeholder="Ask anything..."
+    "Ask a question",
+    placeholder="What is Generative AI?"
 )
 
 if question:
     with st.spinner("Generating response..."):
         try:
-            response = chain.invoke({
-                "question": question
-            })
-
+            response = chain.invoke({"question": question})
             st.subheader("Response")
             st.write(response)
-
         except Exception as e:
             st.error(f"Error: {e}")
