@@ -23,10 +23,7 @@ prompt = ChatPromptTemplate.from_messages([
     )
 ])
 
-llm = OllamaLLM(
-    model="llama3.2:3b",
-    base_url="https://YOUR-OLLAMA-SERVER"
-)
+llm = OllamaLLM(model="llama3.2:3b")
 
 output_parser = StrOutputParser()
 
